@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-import logo from './logo.svg'
 import './App.css'
 import Question from './Question'
 import UserAnswer from './UserAnswer'
@@ -27,6 +26,7 @@ class App extends Component {
       }
     }
 
+  //eslint-disable-next-line
   _submitAnswer = async () => {
     const answer = await axios.post(`${url}/api/onion-or-not`, {
       id: this.state.question.id,
@@ -104,7 +104,7 @@ class App extends Component {
               <Question question={this.state.question} />
             </Col>
           </Row>
-          { Object.keys(this.state.answer) == 0 &&
+          { Object.keys(this.state.answer) === 0 &&
             <Row>
               <Col md={6}>
                 <UserAnswer handleClick={() => { this._handleUserAnswer(true) }}>r/TheOnion</UserAnswer>
