@@ -20,8 +20,10 @@ class App extends Component {
         userAnswer: {},
         userAnswerSubmitted: false,
         answer: {},
-        totalQuestions: 0,
-        totalCorrect: 0,
+        score: {
+          numOfQuestions: 0,
+          numCorrect: 0,
+        }
       }
     }
 
@@ -33,8 +35,13 @@ class App extends Component {
     this.setState({
       answer: answer.data,
       userAnswerSubmitted: true,
-      totalCorrect: answer.data.correct ? this.state.totalCorrect + 1 : this.state.totalCorrect,
-      totalQuestions: this.state.totalQuestions + 1
+      score: {
+        numCorrect: answer.data.correct ? this.state.score.numCorrect + 1 : this.state.score.numCorrect,
+        numOfQuestions: this.state.score.numOfQuestions + 1
+      }
+       
+    }, () => {
+      this._setStoredScore()
     })
   }
   
@@ -65,9 +72,25 @@ class App extends Component {
    _getNextQuestion = () => {
      this._resetGameState(this._getQuestion)
    }
+
+   _getStoredScore = () => {
+     const storedScore = JSON.parse(localStorage.getItem('score'))
+
+     storedScore && this.setState({
+       score: {
+        numOfQuestions: storedScore.numOfQuestions,
+        numCorrect: storedScore.numCorrect,
+       }
+     })
+   }
+
+   _setStoredScore = () => {
+     localStorage.setItem('score', JSON.stringify(this.state.score))
+   }
     
   componentDidMount() {
     this._getQuestion();
+    this._getStoredScore()
   }
 
   render() {
@@ -93,7 +116,7 @@ class App extends Component {
           }
           <Row>
             <Col md={4} mdOffset={4}>
-              <ScoreCounter totalQuestions={this.state.totalQuestions} totalCorrect={this.state.totalCorrect}/>
+              <ScoreCounter totalQuestions={this.state.score.numOfQuestions} totalCorrect={this.state.score.numCorrect}/>
             </Col>
           </Row>
           <Row>
