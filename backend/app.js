@@ -5,8 +5,45 @@ const axios = require('axios')
 const cors = require('cors')
 const question = require('./db/question.js')
 
-// TODO: eslint or prettier
-// TODO: Randomly use stored questions and new questions
+const pickSub = () => (Math.floor(Math.random() * 10) % 2 === 0 ? 'TheOnion' : 'NotTheOnion')
+
+const getPostFromReddit = async (sub) => {
+    let result
+    try {
+        const fullPost = await axios.get(`https://reddit.com/r/${sub}/random.json`)
+        const post = fullPost.data[0].data.children[0].data
+        result = {
+            title: post.title,
+            permalink: post.permalink,
+            url: post.url,
+            theonion: (sub === 'TheOnion'),
+        }
+    } catch (error) {
+        console.log(error)
+        result = undefined
+    }
+    return result
+}
+
+getQuestion = async () => {
+    const randomNumber = (Math.floor(Math.random() * 100))
+    if(randomNumber >= 40) {
+        const post = await question.getRandom()
+        console.log(post)
+        return {
+            title: post.posttitle,
+            id: post.id,
+        }
+    } else {
+        const post = await getPostFromReddit(pickSub())
+        if(!post) return undefined
+        const questionId = await question.save(post)
+        return {
+            title: post.title,
+            id: questionId,
+        }
+    }
+}
 
 const app = express()
 
@@ -22,26 +59,13 @@ app.get('/', (req, res) => res.status(200).send({
     message: 'Welcome to OnionOrNot.',
 }))
 
-const pickSub = () => (Math.floor(Math.random() * 10) % 2 === 0 ? 'TheOnion' : 'NotTheOnion')
-
-const getPost = async (sub) => {
-    const fullPost = await axios.get(`https://reddit.com/r/${sub}/random.json`)
-    const post = fullPost.data[0].data.children[0].data
-    return {
-        'title': post.title,
-        'permalink': post.permalink,
-        'url': post.url,
-        'theonion': (sub === 'TheOnion'),
-    }
-}
 
 app.get('/api/onion-or-not', async (req, res) => {
-    const post = await getPost(pickSub())
-    const savedQuestionId = await question.save(post)
-    if (savedQuestionId) {
+    const question = await getQuestion()
+    if (question) {
         res.json({
-            id: savedQuestionId,
-            title: post.title,
+            id: question.id,
+            title: question.title,
         })
     } else {
         res.status(500).send('Something broke!')
