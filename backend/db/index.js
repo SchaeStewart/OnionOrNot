@@ -5,11 +5,9 @@ const pool = new Pool({
     host: process.env.PGHOST,
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
-    port: process.env.endPGPORT
+    port: process.env.PGPORT
 })
 
 module.exports = { 
-    query: async (text, params) => {
-        return await pool.query(text, params)
-    }
+    query: (text, params) => pool.query(text, params)
 }

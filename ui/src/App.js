@@ -25,7 +25,7 @@ class App extends Component {
         }
       }
     }
-    //eslint-disable-next-line
+  // eslint-disable-next-line
   _submitAnswer = async () => {
     const answer = await axios.post(`${url}/api/onion-or-not`, {
       id: this.state.question.id,
