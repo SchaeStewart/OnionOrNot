@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const axios = require('axios')
 const cors = require('cors')
 const question = require('./db/question.js')
-const { getQuestion } = require('./lib/getQuestion')
+const getQuestion = require('./lib/getQuestion')
 
 const app = express()
 app.use(logger('dev'))

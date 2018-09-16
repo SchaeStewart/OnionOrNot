@@ -1,7 +1,7 @@
 const { getRedditPost } = require('./getRedditPost')
 const question = require('../db/question')
-module.exports = {
-	getQuestion: async function() {
+
+async function getQuestion() {
     const randomNumber = (Math.floor(Math.random() * 100))
     if(randomNumber >= 40) {
         const post = await question.getRandom()
@@ -19,5 +19,6 @@ module.exports = {
             id: questionId,
         }
     }
-	}
 }
+
+module.exports = getQuestion;
