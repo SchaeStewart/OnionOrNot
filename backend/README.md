@@ -1,12 +1,16 @@
 # Onion Or Not - Backend
 
-## DB
-- Run `node ./db/tables.js` to get create tables
-- `.env` needs the following values:  
+## Getting Started
 ```
-PGUSER=dbuser
-PGHOST=database.server.com
-PGPASSWORD=secretpassword
-PGDATABASE=mydb
-PGPORT=3211
+docker-compose build
+docker-compose up # optional -d to run in background
+docker-compose exec onion_or_not_server node ./db/tables.js
+
+## API
+[/] Litmus test to see if server is up. Should see welcome message
+`GET` [/api/onion-or-not] - Returns a title and id
+`POST` [/api/onion-or-not] - accepts x-www-form-urlencoded data 
+```
+id: (the id from the get request)
+theonion: bool
 ```
