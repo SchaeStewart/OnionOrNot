@@ -1,21 +1,16 @@
 const db = require('../db');
+const logError = require('../lib');
 
 module.exports = {
-  getById: async (id) => {
-    const { rows } = await db.query('SELECT * FROM questions WHERE id = $1', [id]);
-    return rows[0];
-  },
-  save: async (post) => {
-    const res = await db.query('INSERT INTO questions (posttitle, permalink, url, theonion) VALUES ($1, $2, $3, $4) RETURNING id', [post.title, post.permalink, post.url, post.theonion]);
-    return res.rows[0].id;
-  },
-  getRandom: async () => {
-    try {
-      const res = await db.query('SELECT * FROM questions OFFSET RANDOM() * (SELECT COUNT(*) FROM questions) LIMIT 1;');
-      return res.rows[0];
-    } catch (error) {
-      console.log(error, 'error'); // eslint-disable-line no-console
-      return null;
-    }
-  },
+  getById: id => db.query('SELECT * FROM questions WHERE id = $1', [id])
+    .then(res => res.rows[0])
+    .catch(logError),
+
+  save: post => db.query('INSERT INTO questions (posttitle, permalink, url, theonion) VALUES ($1, $2, $3, $4) RETURNING id, posttitle as title', [post.title, post.permalink, post.url, post.theonion])
+    .then(res => res.rows[0])
+    .catch(logError),
+
+  getRandom: () => db.query('SELECT * FROM questions OFFSET RANDOM() * (SELECT COUNT(*) FROM questions) LIMIT 1;')
+    .then(res => res.rows[0])
+    .catch(logError),
 };

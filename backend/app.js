@@ -3,7 +3,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const question = require('./db/question.js');
-const getQuestion = require('./lib/getQuestion');
+const { getQuestion, logError } = require('./lib');
 
 const app = express();
 app.use(logger('dev'));
@@ -18,27 +18,28 @@ app.get('/', (req, res) => res.status(200).send({
 }));
 
 app.get('/api/onion-or-not', async (req, res) => {
-  const theQuestion = await getQuestion();
-  if (theQuestion) {
+  try {
+    const theQuestion = await getQuestion();
+    console.log(theQuestion);
     res.json({
       id: theQuestion.id,
       title: theQuestion.title,
     });
-  } else {
-    res.status(500).send('Something broke!');
+  } catch (err) {
+    logError(err, 'Error getting question');
+    res.status(500).send('Error getting question');
   }
 });
 
 app.post('/api/onion-or-not', async (req, res) => {
-  const userGuess = {
-    id: req.body.id,
-    theonion: req.body.theonion,
-  };
-
-  const savedQuestion = await question.getById(userGuess.id);
-  savedQuestion.correct = userGuess.theonion === savedQuestion.theonion;
-
-  res.json(savedQuestion);
+  try {
+    const savedQuestion = await question.getById(req.body.id);
+    savedQuestion.correct = req.body.theonion === savedQuestion.theonion;
+    res.json(savedQuestion);
+  } catch (err) {
+    logError(err, 'Error during POST /api/onion-or-not');
+    res.status(400).send('Error checking user\'s submission');
+  }
 });
 
 
