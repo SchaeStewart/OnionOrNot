@@ -39,7 +39,7 @@ app.post('/api/onion-or-not', async (req, res) => {
     res.json(savedQuestion);
   } catch (err) {
     logError(err, 'Error during POST /api/onion-or-not');
-    res.status(400).send('Error checking user\'s submission');
+    res.status(403).send('Error checking user\'s submission. The submitted id is not valid');
   }
 });
 
