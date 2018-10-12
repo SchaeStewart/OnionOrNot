@@ -4,7 +4,7 @@
 ```
 docker-compose build
 docker-compose up # optional -d to run in background
-docker-compose exec onion_or_not_server node ./db/tables.js
+npm run migrate:up
 
 ## API
 [/] Litmus test to see if server is up. Should see welcome message
