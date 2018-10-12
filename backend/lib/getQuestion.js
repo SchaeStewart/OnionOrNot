@@ -1,6 +1,6 @@
 const { getRedditPost } = require('./getRedditPost');
 const question = require('../db/question');
-// const { logError } = require('./index');
+const { logError } = require('./helpers');
 
 const SOURCES = {
   database: 0,
@@ -14,14 +14,15 @@ const decideQuestionSource = (decisionRate = 40) => (
 );
 
 function getQuestion() {
-  // if (decideQuestionSource() === SOURCES.database) {
-  // return question.getRandom()
-  //   .then(post => ({ title: post.title, id: post.id }));
-  // .catch(logError);
-  // }
+  console.log('getting question');
+  if (decideQuestionSource() === SOURCES.database) {
+    return question.getRandom()
+      .then(post => ({ title: post.title, id: post.id }))
+      .catch(logError);
+  }
   return getRedditPost()
-    .then(question.save);
-    // .catch(logError);
+    .then(question.save)
+    .catch(logError);
 }
 
 module.exports = getQuestion;

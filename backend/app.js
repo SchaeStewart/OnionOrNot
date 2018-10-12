@@ -3,7 +3,8 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const question = require('./db/question.js');
-const { getQuestion, logError } = require('./lib');
+const { getQuestion } = require('./lib');
+const { logError } = require('./lib/helpers');
 
 const app = express();
 app.use(logger('dev'));

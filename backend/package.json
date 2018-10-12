@@ -6,7 +6,9 @@
   "scripts": {
     "start:dev": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "migrate:up": "docker-compose exec onion_or_not_server node-pg-migrate up",
+    "migrate:down": "docker-compose exec onion_or_not_server node-pg-migrate down"
   },
   "author": "Schaffer Stewart",
   "license": "ISC",

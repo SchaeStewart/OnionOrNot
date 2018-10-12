@@ -1,5 +1,5 @@
 const db = require('../db');
-const logError = require('../lib');
+const { logError } = require('../lib/helpers');
 
 module.exports = {
   getById: id => db.query('SELECT * FROM questions WHERE id = $1', [id])
