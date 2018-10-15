@@ -17,7 +17,7 @@ function getQuestion() {
   console.log('getting question');
   if (decideQuestionSource() === SOURCES.database) {
     return question.getRandom()
-      .then(post => ({ title: post.title, id: post.id }))
+      .then(post => ({ title: post.posttitle, id: post.id }))
       .catch(logError);
   }
   return getRedditPost()

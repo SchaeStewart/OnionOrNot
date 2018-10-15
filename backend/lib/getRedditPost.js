@@ -6,12 +6,14 @@ module.exports = {
   async getRedditPost() {
     const sub = pickSub();
     return axios.get(`https://reddit.com/r/${sub}/random.json`)
-      .then(response => response.fullPost.data[0].data.children[0].data)
+      .then(response => response.data[0].data.children[0].data)
       .then(post => ({
         title: post.title,
         permalink: post.permalink,
         url: post.url,
         theonion: (sub === 'TheOnion'),
-      })).catch(logError);
+        redditId: post.id,
+      }))
+      .catch(logError);
   },
 };

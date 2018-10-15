@@ -21,7 +21,6 @@ app.get('/', (req, res) => res.status(200).send({
 app.get('/api/onion-or-not', async (req, res) => {
   try {
     const theQuestion = await getQuestion();
-    console.log(theQuestion);
     res.json({
       id: theQuestion.id,
       title: theQuestion.title,
