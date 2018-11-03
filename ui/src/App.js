@@ -7,7 +7,7 @@ import UserAnswer from './UserAnswer'
 import Answer from './Answer'
 import ScoreCounter from './ScoreCounter';
 
-const url = 'http://localhost:8000'; //TODO: set via env
+const URL = 'http://localhost:3001'; //TODO: set via env
 /* TODO: Styling */
 
 class App extends Component {
@@ -27,7 +27,7 @@ class App extends Component {
     }
   // eslint-disable-next-line
   _submitAnswer = async () => {
-    const answer = await axios.post(`${url}/api/onion-or-not`, {
+    const answer = await axios.post(`${URL}/api/onion-or-not`, {
       id: this.state.question.id,
       theonion: this.state.isTheOnion
     })
@@ -51,7 +51,7 @@ class App extends Component {
   }
 
   _getQuestion = async () => {
-      const question = await axios.get(`http://localhost:8000/api/onion-or-not`)
+      const question = await axios.get(`${URL}/api/onion-or-not`)
       //TODO: error handling
       this.setState({ 
         question: question.data,
@@ -98,31 +98,37 @@ class App extends Component {
         <header>
           <h1>Welcome to Onion or Not!</h1>
         </header>
+        <Row>
+          <Col md={6} mdOffset={3}>
+            <Question question={this.state.question} />
+          </Col>
+        </Row>
+        { Object.keys(this.state.answer).length === 0 &&
           <Row>
-            <Col md={6} mdOffset={3}>
-              <Question question={this.state.question} />
+            <Col md={6}>
+              <UserAnswer handleClick={() => { this._handleUserAnswer(true) }}>r/TheOnion</UserAnswer>
+            </Col>
+            <Col md={6}>
+              <UserAnswer handleClick={() => { this._handleUserAnswer(false) }}>r/NotTheOnion</UserAnswer>
             </Col>
           </Row>
-          { Object.keys(this.state.answer).length === 0 &&
-            <Row>
-              <Col md={6}>
-                <UserAnswer handleClick={() => { this._handleUserAnswer(true) }}>r/TheOnion</UserAnswer>
-              </Col>
-              <Col md={6}>
-                <UserAnswer handleClick={() => { this._handleUserAnswer(false) }}>r/NotTheOnion</UserAnswer>
-              </Col>
-            </Row>
-          }
-          <Row>
-            <Col md={4} mdOffset={4}>
-              <ScoreCounter totalQuestions={this.state.score.numOfQuestions} totalCorrect={this.state.score.numCorrect}/>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={4} mdOffset={4}>
-              <Answer answer={this.state.answer} getQuestion={this._getNextQuestion} />
-            </Col>
-          </Row>
+        }
+        <Row>
+          <Col md={4} mdOffset={4}>
+            <ScoreCounter
+              totalQuestions={this.state.score.numOfQuestions}
+              totalCorrect={this.state.score.numCorrect}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={4} mdOffset={4}>
+            <Answer
+              answer={this.state.answer}
+              getQuestion={this._getNextQuestion}
+            />
+          </Col>
+        </Row>
           
       </div>
     )

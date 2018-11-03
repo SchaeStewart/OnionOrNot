@@ -1,10 +1,8 @@
 import React from 'react'
-import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types'
 
-const ScoreCounter = (props) => {
-	const {totalQuestions, totalCorrect} = props
-	return(<h3>{totalCorrect} out of {totalQuestions} correct</h3>)
-}
+const ScoreCounter = ({totalQuestions, totalCorrect}) => 
+	<h3>{totalCorrect} out of {totalQuestions} correct</h3>
 
 ScoreCounter.propTypes = {
 	totalCorrect: PropTypes.number,
