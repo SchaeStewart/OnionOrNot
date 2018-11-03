@@ -1,31 +1,25 @@
 {
-  "name": "onion-or-not-server",
+  "name": "onion-or-not",
   "version": "1.0.0",
-  "description": "Backend for Onion Or Not app",
-  "main": "index.js",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
   "scripts": {
-    "start:dev": "nodemon ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "node-pg-migrate",
-    "migrate:up": "docker-compose exec onion_or_not_server node-pg-migrate up",
-    "migrate:down": "docker-compose exec onion_or_not_server node-pg-migrate down"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Schaffer Stewart",
-  "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.348.0",
     "axios": "^0.18.0",
-    "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
-    "dotenv": "^5.0.1",
-    "express": "^4.16.2",
-    "morgan": "^1.9.0",
-    "node-pg-migrate": "^3.11.0",
-    "pg": "^7.4.1"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "eslint": "^5.6.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.18.4"
-  }
+    "@types/aws-lambda": "8.10.1",
+    "@types/node": "^8.0.57",
+    "serverless-webpack": "^5.1.1",
+    "source-map-support": "^0.5.6",
+    "ts-loader": "^4.2.0",
+    "typescript": "^2.9.2",
+    "webpack": "^4.5.0"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
 }
