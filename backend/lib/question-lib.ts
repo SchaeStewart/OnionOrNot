@@ -5,23 +5,26 @@ import Post from './Post'
 
 
   export const getById = (id: string): Post => {
+    console.log(id)
     const params = {
       TableName: 'onion-or-not',
-      Key: {
-        id
+      // IndexName: 'Index',
+      KeyConditionExpression: 'id = :id',
+      ExpressionAttributeValues: {
+        ':id': id
       }
     }
-    return dynamoDbLib.call('get', params)
+    return dynamoDbLib.call('query', params)
       .then(res => ({...res.Item}))
   }
-  
 
-  export const save = (post: Post) => {
+  export const save = async (post: Post) => {
+    console.log(post, 'create question')
     const params = {
       TableName: "onion-or-not",
       Item: post 
     };
-    dynamoDbLib.call('put', params)
+    await dynamoDbLib.call('put', params)
     return { title: post.title, id: post.id }
   }
     // .catch(logError),
