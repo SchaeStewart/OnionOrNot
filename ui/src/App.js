@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
+import { API } from 'aws-amplify';
 import './App.css'
 import Question from './Question'
 import UserAnswer from './UserAnswer'
 import Answer from './Answer'
 import ScoreCounter from './ScoreCounter';
+import config from './config';
+const URL = config.apiGateway.URL
 
-const URL = 'http://localhost:3001'; //TODO: set via env
 /* TODO: Styling */
 
 class App extends Component {
@@ -27,21 +29,27 @@ class App extends Component {
     }
   // eslint-disable-next-line
   _submitAnswer = async () => {
-    const answer = await axios.post(`${URL}/api/onion-or-not`, {
-      id: this.state.question.id,
-      theonion: this.state.isTheOnion
-    })
-    this.setState({
-      answer: answer.data,
-      userAnswerSubmitted: true,
-      score: {
-        numCorrect: answer.data.correct ? this.state.score.numCorrect + 1 : this.state.score.numCorrect,
-        numOfQuestions: this.state.score.numOfQuestions + 1
-      }
-       
-    }, () => {
-      this._setStoredScore()
-    })
+    try {
+      const answer = await axios.post(`${URL}/answer`, {
+        id: this.state.question.id,
+        theOnion: this.state.isTheOnion
+      })
+      .then((res) => JSON.parse(res.data.body))
+      console.log(answer)
+      this.setState({
+        answer,
+        userAnswerSubmitted: true,
+        score: {
+          numCorrect: answer.correct ? this.state.score.numCorrect + 1 : this.state.score.numCorrect,
+          numOfQuestions: this.state.score.numOfQuestions + 1
+        }
+        
+      }, () => {
+        this._setStoredScore()
+      })
+    } catch (e) {
+      console.log(e, 'error submitting answer')
+    }
   }
   
   _handleUserAnswer = (isTheOnion) => { 
@@ -51,11 +59,13 @@ class App extends Component {
   }
 
   _getQuestion = async () => {
-      const question = await axios.get(`${URL}/api/onion-or-not`)
-      //TODO: error handling
-      this.setState({ 
-        question: question.data,
-      })
+    const question = await axios.get(`${URL}/question`)
+    // const question = await API.get("dev-onion-or-not", 'question')
+    console.log(question)
+    //TODO: error handling
+    this.setState({ 
+      question: JSON.parse(question.data.body)
+    })
   }
 
   _resetGameState = (callback) => {

@@ -8,13 +8,11 @@ import Post from './Post'
     console.log(id)
     const params = {
       TableName: 'onion-or-not',
-      // IndexName: 'Index',
-      KeyConditionExpression: 'id = :id',
-      ExpressionAttributeValues: {
-        ':id': id
+      Key: {
+        id: id,
       }
     }
-    return dynamoDbLib.call('query', params)
+    return dynamoDbLib.call('get', params)
       .then(res => ({...res.Item}))
   }
 
