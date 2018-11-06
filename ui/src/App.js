@@ -10,6 +10,11 @@ import config from './config';
 const URL = config.apiGateway.URL
 
 /* TODO: Styling */
+/**
+ * TODO: Random db/reddit access in getQustion.ts
+ * TODO: Remove log statements
+ * TODO: Fix package.json.homepage
+ */
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +39,6 @@ class App extends Component {
         theOnion: this.state.isTheOnion
       })
       .then((res) => JSON.parse(res.data.body))
-      console.log(answer)
       this.setState({
         answer,
         userAnswerSubmitted: true,
@@ -60,7 +64,6 @@ class App extends Component {
   _getQuestion = async () => {
     const question = await axios.get(`${URL}/question`)
     // const question = await API.get("dev-onion-or-not", 'question')
-    console.log(question)
     //TODO: error handling
     this.setState({ 
       question: JSON.parse(question.data.body)
