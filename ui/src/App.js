@@ -10,6 +10,12 @@ import config from './config'
 const URL = config.apiGateway.URL
 
 /* TODO: Styling */
+/**
+ * Finish implementing react router
+ * Grommet or other UI Library
+ * About me page
+ * How to play game page
+ */
 
 class App extends Component {
   constructor(props) {
