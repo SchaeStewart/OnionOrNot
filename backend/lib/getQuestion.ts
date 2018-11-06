@@ -1,6 +1,7 @@
 import axios from 'axios'
 import uuid from 'uuid';
 import * as question from './question-lib';
+import { logError } from './log-lib';
 import Post from './Post'
 
 enum SOURCES {
@@ -21,9 +22,7 @@ async function getRedditPost() {
       theOnion: (sub === 'TheOnion'),
       redditId: post.id,
     }))
-    .catch((error) => {
-        console.log(error)
-    });
+    .catch(logError('Error saving post'))
 }
 
 const decideQuestionSource = (decisionRate = 40) => (
@@ -40,6 +39,6 @@ export default function getQuestion() {
     //   .catch(logError);
   // }
   return getRedditPost()
-    .then(question.save) // TODO: save question
-    // .catch(logError);
+    .then(question.save)
+    .catch(logError('Error getting new reddit post'));
 }
