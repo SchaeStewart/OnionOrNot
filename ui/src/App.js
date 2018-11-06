@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import './App.css'
 import Question from './Question'
-import UserAnswer from './UserAnswer'
+import GuessSubreddit from './GuessSubreddit'
 import PostInformation from './PostInformation'
 import ScoreCounter from './ScoreCounter'
 import config from './config'
@@ -121,23 +121,21 @@ class App extends Component {
         </Row>
         {Object.keys(this.state.answer).length === 0 && (
           <Row>
-            <Col md={6}>
-              <UserAnswer
+            <Col md={6} xs={6}>
+              <GuessSubreddit
+                btnText="r/theOnion"
                 handleClick={() => {
                   this._handleUserAnswer(true)
                 }}
-              >
-                r/TheOnion
-              </UserAnswer>
+              />
             </Col>
-            <Col md={6}>
-              <UserAnswer
+            <Col md={6} xs={6}>
+              <GuessSubreddit
+                btnText="r/NotTheOnion"
                 handleClick={() => {
                   this._handleUserAnswer(false)
                 }}
-              >
-                r/NotTheOnion
-              </UserAnswer>
+              />
             </Col>
           </Row>
         )}
