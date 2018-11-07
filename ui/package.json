@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "react": "^16.2.0",
+    "grommet": "^2.0.0-rc",
+    "grommet-icons": "^3.2.0",
+    "react": "^16.6.1",
     "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.6.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "styled-components": "^4.0.3"
   },
   "scripts": {
     "build": "react-scripts build",
@@ -21,7 +24,7 @@
     "postdeploy": "aws cloudfront create-invalidation --distribution-id E1T06J0UWAZLHY --paths '/*' && aws cloudfront create-invalidation --distribution-id E2MBAGNMM38MRJ --paths '/*'"
   },
   "devDependencies": {
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.1",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.7.0",
     "prettier": "^1.14.3"

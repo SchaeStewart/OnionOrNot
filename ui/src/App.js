@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'react-bootstrap'
-import axios from 'axios'
+import { Grommet, Grid, Text, Box, Button } from 'grommet'
+import { base } from 'grommet/themes'
+import Routes from './Routes'
 import './App.css'
-import Question from './Question'
-import GuessSubreddit from './GuessSubreddit'
-import PostInformation from './PostInformation'
-import ScoreCounter from './ScoreCounter'
-import config from './config'
-const URL = config.apiGateway.URL
 
 /* TODO: Styling */
 /**
  * Finish implementing react router
- * Grommet or other UI Library
+ * Restyle OnionOrNot
+ * Project structure
  * About me page
  * How to play game page
  */
@@ -21,147 +17,68 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      question: null,
-      isTheOnion: null,
-      userAnswer: {},
-      userAnswerSubmitted: false,
-      answer: {},
-      score: {
-        numOfQuestions: 0,
-        numCorrect: 0,
-      },
+      sidebar: true,
     }
-  }
-  // eslint-disable-next-line
-  _submitAnswer = async () => {
-    try {
-      const answer = await axios
-        .post(`${URL}/answer`, {
-          id: this.state.question.id,
-          theOnion: this.state.isTheOnion,
-        })
-        .then(res => JSON.parse(res.data.body))
-      this.setState(
-        {
-          answer,
-          userAnswerSubmitted: true,
-          score: {
-            numCorrect: answer.correct
-              ? this.state.score.numCorrect + 1
-              : this.state.score.numCorrect,
-            numOfQuestions: this.state.score.numOfQuestions + 1,
-          },
-        },
-        () => {
-          this._setStoredScore()
-        }
-      )
-    } catch (e) {
-      console.log(e, 'error submitting answer')
-    }
-  }
-
-  _handleUserAnswer = isTheOnion => {
-    this.setState({ isTheOnion: isTheOnion }, () => {
-      this._submitAnswer()
-    })
-  }
-
-  _getQuestion = async () => {
-    const question = await axios.get(`${URL}/question`)
-    // const question = await API.get("dev-onion-or-not", 'question')
-    //TODO: error handling
-    this.setState({
-      question: JSON.parse(question.data.body),
-    })
-  }
-
-  _resetGameState = callback => {
-    this.setState(
-      {
-        question: null,
-        isTheOnion: null,
-        userAnswer: {},
-        userAnswerSubmitted: false,
-        answer: {},
-      },
-      callback
-    )
-  }
-
-  _getNextQuestion = () => {
-    this._resetGameState(this._getQuestion)
-  }
-
-  _getStoredScore = () => {
-    const storedScore = JSON.parse(localStorage.getItem('score'))
-
-    storedScore &&
-      this.setState({
-        score: {
-          numOfQuestions: storedScore.numOfQuestions,
-          numCorrect: storedScore.numCorrect,
-        },
-      })
-  }
-
-  _setStoredScore = () => {
-    localStorage.setItem('score', JSON.stringify(this.state.score))
-  }
-
-  componentDidMount() {
-    this._getQuestion()
-    this._getStoredScore()
   }
 
   render() {
+    const { sidebar } = this.state
     return (
-      <div className="App">
-        <header>
-          <h1>Welcome to Onion or Not!</h1>
-        </header>
-        <Row>
-          <Col md={6} mdOffset={3}>
-            <Question question={this.state.question} />
-          </Col>
-        </Row>
-        {Object.keys(this.state.answer).length === 0 && (
-          <Row>
-            <Col md={6} xs={6}>
-              <GuessSubreddit
-                btnText="r/theOnion"
-                handleClick={() => {
-                  this._handleUserAnswer(true)
-                }}
-              />
-            </Col>
-            <Col md={6} xs={6}>
-              <GuessSubreddit
-                btnText="r/NotTheOnion"
-                handleClick={() => {
-                  this._handleUserAnswer(false)
-                }}
-              />
-            </Col>
-          </Row>
-        )}
-        <Row>
-          <Col md={4} mdOffset={4}>
-            <ScoreCounter
-              totalQuestions={this.state.score.numOfQuestions}
-              totalCorrect={this.state.score.numCorrect}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={4} mdOffset={4}>
-            <PostInformation
-              answer={this.state.answer}
-              getQuestion={this._getNextQuestion}
-            />
-          </Col>
-        </Row>
-      </div>
+      <Grommet theme={base}>
+        <Grid
+          rows={['auto', 'medium']}
+          columns={['auto', 'flex']}
+          areas={[
+            { name: 'header', start: [0, 0], end: [1, 0] },
+            { name: 'sidebar', start: [0, 1], end: [0, 1] },
+            { name: 'main', start: [1, 1], end: [1, 1] },
+          ]}
+        >
+          <Box
+            gridArea="header"
+            direction="row"
+            align="center"
+            justify="between"
+            pad={{ horizontal: 'medium', vertical: 'small' }}
+            background="dark-2"
+          >
+            <Button onClick={() => this.setState({ sidebar: !sidebar })}>
+              <Text size="large">Onion or Not</Text>
+            </Button>
+            <Text>SchaeStewart@gmail.com</Text>
+          </Box>
+          {sidebar && (
+            <Box
+              gridArea="sidebar"
+              background="dark-5"
+              width="small"
+              animation={[
+                { type: 'fadeIn', duration: 300 },
+                { type: 'slideRight', size: 'xlarge', duration: 150 },
+              ]}
+            >
+              <Button key="home" href="/" hoverIndicator>
+                <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+                  <Text>Home</Text>
+                </Box>
+              </Button>
+              <Button key="about" href="/about" hoverIndicator>
+                <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+                  <Text>About</Text>
+                </Box>
+              </Button>
+              <Button key="howToPlay" href="/how-to-play" hoverIndicator>
+                <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+                  <Text>How To Play</Text>
+                </Box>
+              </Button>
+            </Box>
+          )}
+          <Box gridArea="main" justify="center" align="center">
+            <Routes />
+          </Box>
+        </Grid>
+      </Grommet>
     )
   }
 }
