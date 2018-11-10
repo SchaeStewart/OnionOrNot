@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { Box, Grid } from 'grommet'
 import axios from 'axios'
 import './App.css'
 import Question from './Question'
 import GuessSubreddit from './GuessSubreddit'
 import PostInformation from './PostInformation'
 import ScoreCounter from './ScoreCounter'
+import CorrectOrIncorrect from './CorrectOrIncorrect'
 import config from './config'
 const URL = config.apiGateway.URL
-
-/* TODO: Styling */
 /**
- * Finish implementing react router
- * Grommet or other UI Library
- * About me page
- * How to play game page
+ * TODO: grommet here
+ * Break into presentation vs function
  */
 
 export default class OnionOrNot extends Component {
@@ -117,50 +114,50 @@ export default class OnionOrNot extends Component {
   render() {
     return (
       <div className="App">
-        <header>
-          <h1>Welcome to Onion or Not!</h1>
-        </header>
-        <Row>
-          <Col md={6} mdOffset={3}>
-            <Question question={this.state.question} />
-          </Col>
-        </Row>
+        <Box align="center" width="medium">
+          <Question question={this.state.question} />
+        </Box>
         {Object.keys(this.state.answer).length === 0 && (
-          <Row>
-            <Col md={6} xs={6}>
+          <Grid
+            columns={{
+              count: 2,
+              size: 'auto',
+            }}
+            gap="large"
+          >
+            <Box>
               <GuessSubreddit
                 btnText="r/theOnion"
                 handleClick={() => {
                   this._handleUserAnswer(true)
                 }}
               />
-            </Col>
-            <Col md={6} xs={6}>
+            </Box>
+            <Box>
               <GuessSubreddit
                 btnText="r/NotTheOnion"
                 handleClick={() => {
                   this._handleUserAnswer(false)
                 }}
               />
-            </Col>
-          </Row>
+            </Box>
+          </Grid>
         )}
-        <Row>
-          <Col md={4} mdOffset={4}>
-            <ScoreCounter
-              totalQuestions={this.state.score.numOfQuestions}
-              totalCorrect={this.state.score.numCorrect}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={4} mdOffset={4}>
-            <PostInformation
-              answer={this.state.answer}
-              getQuestion={this._getNextQuestion}
-            />
-          </Col>
-        </Row>
+        <Box>
+          <ScoreCounter
+            totalQuestions={this.state.score.numOfQuestions}
+            totalCorrect={this.state.score.numCorrect}
+          />
+        </Box>
+        <Box>
+          {Object.keys(this.state.answer).length > 0 && (
+            <CorrectOrIncorrect isCorrect={this.state.answer.correct} />
+          )}
+          <PostInformation
+            answer={this.state.answer}
+            getQuestion={this._getNextQuestion}
+          />
+        </Box>
       </div>
     )
   }

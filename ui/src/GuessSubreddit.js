@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
+import { Button } from 'grommet'
 import { PropTypes } from 'prop-types'
 
 const GuessSubreddit = ({ handleClick, btnText }) => (
-  <Button bsStyle="primary" onClick={handleClick}>
+  <Button primary onClick={handleClick}>
     {btnText}
   </Button>
 )
