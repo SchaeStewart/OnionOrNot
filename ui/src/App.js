@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Grommet, Grid, Text, Box, Button } from 'grommet'
+import { Menu } from 'grommet-icons'
 import { base } from 'grommet/themes'
 import Routes from './Routes'
 import './App.css'
@@ -17,7 +18,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      sidebar: true,
+      sidebar: false,
     }
   }
 
@@ -43,9 +44,9 @@ class App extends Component {
             background="dark-2"
           >
             <Button onClick={() => this.setState({ sidebar: !sidebar })}>
-              <Text size="large">Onion or Not</Text>
+              <Menu />
             </Button>
-            <Text>SchaeStewart@gmail.com</Text>
+            <Text size="large">Onion or Not </Text>
           </Box>
           {sidebar && (
             <Box
