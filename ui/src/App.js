@@ -7,11 +7,10 @@ import './App.css'
 
 /* TODO: Styling */
 /**
- * Finish implementing react router
- * Restyle OnionOrNot
- * Project structure
- * About me page
- * How to play game page
+ * Frontend logic clean up
+ * Add how to play modal on first launch
+ * Fix the www domain
+ * Show question history
  */
 
 class App extends Component {
