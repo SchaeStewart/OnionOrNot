@@ -11,8 +11,7 @@ const scoreStorage = {
   getScore: () => {},
 }
 
-//TODO: pick up here. move question related functions to <Question />
-// (or QuestionContainer) and return data via callbacks
+// TODO: use redux handle this refactor
 
 export default class OnionOrNot extends Component {
   constructor(props) {
@@ -29,53 +28,11 @@ export default class OnionOrNot extends Component {
       },
     }
   }
-  // eslint-disable-next-line
-  // submitAnswer = async () => {
-  //   questionHandler
-  //     .postAnswer(this.state.question.id, this.state.isTheOnion)
-  //     .then(answer => {
-  //       this.setState(
-  //         {
-  //           answer,
-  //           userAnswerSubmitted: true,
-  //           score: {
-  //             numCorrect: answer.correct
-  //               ? this.state.score.numCorrect + 1
-  //               : this.state.score.numCorrect,
-  //             numOfQuestions: this.state.score.numOfQuestions + 1,
-  //           },
-  //         },
-  //         () => {
-  //           scoreStorage.saveScore(this.state.score)
-  //         }
-  //       )
-  //     })
-  //     .catch(e => {
-  //       console.log(e, 'error submitting answer')
-  //       // TODO: set display error flag
-  //       this.setState({ userAnswerSubmitted: false })
-  //     })
-  // }
-
   _handleUserAnswer = isTheOnion => {
     this.setState({ isTheOnion: isTheOnion }, () => {
       this.submitAnswer()
     })
   }
-
-  // _getQuestion = async () => {
-  //   await questionHandler
-  //     .getQuestion()
-  //     .then(question => {
-  //       this.setState({
-  //         question,
-  //       })
-  //     })
-  //     .catch(e => {
-  //       console.log(e, 'error getting question')
-  //       // TODO: display error
-  //     })
-  // }
 
   _resetGameState = callback => {
     this.setState(
