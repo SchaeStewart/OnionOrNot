@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import { Box, Grid } from 'grommet'
-import axios from 'axios'
+import { Box } from 'grommet'
 import './App.css'
-import Question from './Question'
-import GuessSubreddit from './GuessSubreddit'
-import PostInformation from './PostInformation'
-import ScoreCounter from './ScoreCounter'
-import CorrectOrIncorrect from './CorrectOrIncorrect'
-import config from './config'
-const URL = config.apiGateway.URL
-/**
- * TODO: grommet here
- * Break into presentation vs function
- */
+import QuestionContainer from './QuestionContainer'
+import PostInformation from './presentational/PostInformation'
+import ScoreCounter from './presentational/ScoreCounter'
+import CorrectOrIncorrect from './presentational/CorrectOrIncorrect'
+
+const scoreStorage = {
+  saveScore: score => {},
+  getScore: () => {},
+}
+
+//TODO: pick up here. move question related functions to <Question />
+// (or QuestionContainer) and return data via callbacks
 
 export default class OnionOrNot extends Component {
   constructor(props) {
@@ -30,48 +30,52 @@ export default class OnionOrNot extends Component {
     }
   }
   // eslint-disable-next-line
-  _submitAnswer = async () => {
-    try {
-      const answer = await axios
-        .post(`${URL}/answer`, {
-          id: this.state.question.id,
-          theOnion: this.state.isTheOnion,
-        })
-        .then(res => JSON.parse(res.data.body))
-      this.setState(
-        {
-          answer,
-          userAnswerSubmitted: true,
-          score: {
-            numCorrect: answer.correct
-              ? this.state.score.numCorrect + 1
-              : this.state.score.numCorrect,
-            numOfQuestions: this.state.score.numOfQuestions + 1,
-          },
-        },
-        () => {
-          this._setStoredScore()
-        }
-      )
-    } catch (e) {
-      console.log(e, 'error submitting answer')
-    }
-  }
+  // submitAnswer = async () => {
+  //   questionHandler
+  //     .postAnswer(this.state.question.id, this.state.isTheOnion)
+  //     .then(answer => {
+  //       this.setState(
+  //         {
+  //           answer,
+  //           userAnswerSubmitted: true,
+  //           score: {
+  //             numCorrect: answer.correct
+  //               ? this.state.score.numCorrect + 1
+  //               : this.state.score.numCorrect,
+  //             numOfQuestions: this.state.score.numOfQuestions + 1,
+  //           },
+  //         },
+  //         () => {
+  //           scoreStorage.saveScore(this.state.score)
+  //         }
+  //       )
+  //     })
+  //     .catch(e => {
+  //       console.log(e, 'error submitting answer')
+  //       // TODO: set display error flag
+  //       this.setState({ userAnswerSubmitted: false })
+  //     })
+  // }
 
   _handleUserAnswer = isTheOnion => {
     this.setState({ isTheOnion: isTheOnion }, () => {
-      this._submitAnswer()
+      this.submitAnswer()
     })
   }
 
-  _getQuestion = async () => {
-    const question = await axios.get(`${URL}/question`)
-    // const question = await API.get("dev-onion-or-not", 'question')
-    //TODO: error handling
-    this.setState({
-      question: JSON.parse(question.data.body),
-    })
-  }
+  // _getQuestion = async () => {
+  //   await questionHandler
+  //     .getQuestion()
+  //     .then(question => {
+  //       this.setState({
+  //         question,
+  //       })
+  //     })
+  //     .catch(e => {
+  //       console.log(e, 'error getting question')
+  //       // TODO: display error
+  //     })
+  // }
 
   _resetGameState = callback => {
     this.setState(
@@ -107,7 +111,7 @@ export default class OnionOrNot extends Component {
   }
 
   componentDidMount() {
-    this._getQuestion()
+    // this._getQuestion()
     this._getStoredScore()
   }
 
@@ -115,34 +119,12 @@ export default class OnionOrNot extends Component {
     return (
       <div className="App">
         <Box align="center" width="medium">
-          <Question question={this.state.question} />
-        </Box>
-        {Object.keys(this.state.answer).length === 0 && (
-          <Grid
-            columns={{
-              count: 2,
-              size: 'auto',
+          <QuestionContainer
+            handlerAnswer={answer => {
+              console.log(answer)
             }}
-            gap="large"
-          >
-            <Box>
-              <GuessSubreddit
-                btnText="r/theOnion"
-                handleClick={() => {
-                  this._handleUserAnswer(true)
-                }}
-              />
-            </Box>
-            <Box>
-              <GuessSubreddit
-                btnText="r/NotTheOnion"
-                handleClick={() => {
-                  this._handleUserAnswer(false)
-                }}
-              />
-            </Box>
-          </Grid>
-        )}
+          />
+        </Box>
         <Box>
           <ScoreCounter
             totalQuestions={this.state.score.numOfQuestions}
