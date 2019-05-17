@@ -1,4 +1,7 @@
 <script>
+  import Question from "./Question.svelte";
+  import Answer from "./Answer.svelte";
+
   // State
   let question = getQuestion();
   let answer = null;
@@ -13,7 +16,6 @@
     const data = await res.json();
 
     if (res.ok) {
-      console.log(data);
       return JSON.parse(data.body);
     } else {
       throw new Error(data);
@@ -65,13 +67,7 @@
 </style>
 
 <div>
-  {#await question}
-    <p>...Getting question</p>
-  {:then question}
-    <p>{question.title}</p>
-  {:catch error}
-    <p style="color: red">{error.message}</p>
-  {/await}
+  <Question {question} />
 
   <button on:click={() => submitAnswer(true)} disabled={answer !== null}>
     Is r/TheOnion
@@ -80,18 +76,7 @@
     Is r/NotTheOnion
   </button>
 
-  <!-- Answer -->
-  {#if answer !== null}
-    <p>{answer.correct ? 'You got it right!' : 'You got it wrong'}</p>
-    <p>
-      <a href={`https://old.reddit.com/${answer.permalink}`}>
-        View Reddit Post
-      </a>
-    </p>
-    <a href={answer.url}>View Article</a>
-    <br />
-    <button on:click={getNewRound}>Get a new question</button>
-  {/if}
+  <Answer {answer} newRoundHandler={getNewRound} />
 
   <!-- Score counter -->
   <p>You've answered {questionsCorrect} of {questionsAsked} correctly</p>
