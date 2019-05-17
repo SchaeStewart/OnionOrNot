@@ -5,8 +5,8 @@
   // State
   let question = getQuestion();
   let answer = null;
-  let questionsAsked = 0;
-  let questionsCorrect = 0;
+  let questionsAsked = getQuestionsAsked();
+  let questionsCorrect = getQuestionsCorrect();
 
   // Helpers
   async function getQuestion() {
@@ -41,13 +41,32 @@
       }).then(res => res.json());
 
       answer = JSON.parse(data.body);
-      questionsCorrect = answer.correct
-        ? questionsCorrect + 1
-        : questionsCorrect;
-      questionsAsked += 1;
+      saveScore(answer.correct);
     } catch (e) {
       console.log(e);
     }
+  }
+
+  function saveScore(answerIsCorrect) {
+    questionsCorrect = answerIsCorrect
+      ? questionsCorrect + 1
+      : questionsCorrect;
+    questionsAsked += 1;
+    localStorage.setItem("questionsAsked", questionsAsked);
+    localStorage.setItem("questionsCorrect", questionsCorrect);
+  }
+
+  function localStorageGetNumber(key) {
+    const item = localStorage.getItem(key);
+    return item ? parseInt(item) : 0;
+  }
+
+  function getQuestionsAsked() {
+    return localStorageGetNumber("questionsAsked");
+  }
+
+  function getQuestionsCorrect() {
+    return localStorageGetNumber("questionsCorrect");
   }
 
   // Handler
