@@ -1,12 +1,11 @@
 <script>
   import Question from "./Question.svelte";
   import Answer from "./Answer.svelte";
+  import { score } from "./stores.js";
 
   // State
   let question = getQuestion();
   let answer = null;
-  let questionsAsked = getQuestionsAsked();
-  let questionsCorrect = getQuestionsCorrect();
 
   // Helpers
   async function getQuestion() {
@@ -41,32 +40,14 @@
       }).then(res => res.json());
 
       answer = JSON.parse(data.body);
-      saveScore(answer.correct);
+      if (answer.correct) {
+        score.answerCorrect();
+      } else {
+        score.answerIncorrect();
+      }
     } catch (e) {
       console.log(e);
     }
-  }
-
-  function saveScore(answerIsCorrect) {
-    questionsCorrect = answerIsCorrect
-      ? questionsCorrect + 1
-      : questionsCorrect;
-    questionsAsked += 1;
-    localStorage.setItem("questionsAsked", questionsAsked);
-    localStorage.setItem("questionsCorrect", questionsCorrect);
-  }
-
-  function localStorageGetNumber(key) {
-    const item = localStorage.getItem(key);
-    return item ? parseInt(item) : 0;
-  }
-
-  function getQuestionsAsked() {
-    return localStorageGetNumber("questionsAsked");
-  }
-
-  function getQuestionsCorrect() {
-    return localStorageGetNumber("questionsCorrect");
   }
 
   // Handler
@@ -98,5 +79,5 @@
   <Answer {answer} newRoundHandler={getNewRound} />
 
   <!-- Score counter -->
-  <p>You've answered {questionsCorrect} of {questionsAsked} correctly</p>
+  <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
 </div>
