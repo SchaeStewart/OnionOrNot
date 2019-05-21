@@ -17,6 +17,9 @@
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "start": "sirv public",
-    "start:dev": "sirv public --dev"
+    "start:dev": "sirv public --dev",
+    "predeploy": "npm run build",
+    "deploy": "aws s3 sync public s3://onion-or-not-client --delete",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E1T06J0UWAZLHY --paths '/*' && aws cloudfront create-invalidation --distribution-id E2MBAGNMM38MRJ --paths '/*'"
   }
 }
