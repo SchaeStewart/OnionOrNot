@@ -90,12 +90,14 @@
     </button>
   </div>
 
+  <!-- Score counter -->
+  <div class="container has-text-centered">
+    <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+  </div>
+
   <div class="section">
     <div class="container has-text-centered">
       <Answer {answer} newRoundHandler={getNewRound} />
-
-      <!-- Score counter -->
-      <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
     </div>
   </div>
 </div>
