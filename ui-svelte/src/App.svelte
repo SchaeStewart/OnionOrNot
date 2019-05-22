@@ -4,6 +4,7 @@
   import { score } from "./stores.js";
 
   // State
+  let gettingQuestion = true;
   let question = getQuestion();
   let answer = null;
 
@@ -11,13 +12,20 @@
   async function getQuestion() {
     const URL =
       "https://dm10wkvq58.execute-api.us-east-1.amazonaws.com/dev/question";
-    const res = await fetch(URL);
-    const data = await res.json();
+    try {
+      gettingQuestion = true;
+      const res = await fetch(URL);
+      const data = await res.json();
 
-    if (res.ok) {
-      return JSON.parse(data.body);
-    } else {
-      throw new Error(data);
+      if (res.ok) {
+        return JSON.parse(data.body);
+      } else {
+        throw new Error(data);
+      }
+    } catch (e) {
+      console.log(error);
+    } finally {
+      gettingQuestion = false;
     }
   }
 
@@ -61,23 +69,28 @@
   h1 {
     color: purple;
   }
-  button {
-    background: black;
-  }
 </style>
 
-<div>
-  <Question {question} />
+<div class="section">
+  <div class="container">
+    <Question {question} />
 
-  <button on:click={() => submitAnswer(true)} disabled={answer !== null}>
-    Is r/TheOnion
-  </button>
-  <button on:click={() => submitAnswer(false)} disabled={answer !== null}>
-    Is r/NotTheOnion
-  </button>
+    <button
+      class="button is-primary"
+      on:click={() => submitAnswer(true)}
+      disabled={answer !== null || gettingQuestion === true}>
+      Is r/TheOnion
+    </button>
+    <button
+      class="button is-primary"
+      on:click={() => submitAnswer(false)}
+      disabled={answer !== null || gettingQuestion === true}>
+      Is r/NotTheOnion
+    </button>
 
-  <Answer {answer} newRoundHandler={getNewRound} />
+    <Answer {answer} newRoundHandler={getNewRound} />
 
-  <!-- Score counter -->
-  <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+    <!-- Score counter -->
+    <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+  </div>
 </div>
