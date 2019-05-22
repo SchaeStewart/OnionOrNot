@@ -1,11 +1,28 @@
 <script>
-export let question
+  export let question;
 </script>
 
+<style>
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .fa-spinner {
+    animation: spinner 1.5s linear infinite;
+  }
+</style>
+
 {#await question}
-  <p>...Getting question</p>
+  <h1 class="title">
+    <span class="icon ">
+      <i class="fas fa-spinner" />
+    </span>
+    Getting question
+  </h1>
 {:then question}
-  <p>{question.title}</p>
+  <h1 class="title">{question.title}</h1>
 {:catch error}
-  <p style="color: red">{error.message}</p>
+  <h1 class="title has-text-danger">{error.message}</h1>
 {/await}
