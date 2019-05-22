@@ -15,14 +15,14 @@
 </style>
 
 {#await question}
-  <h1 class="title">
+  <h1 class="title has-text-centered">
     <span class="icon ">
       <i class="fas fa-spinner" />
     </span>
     Getting question
   </h1>
 {:then question}
-  <h1 class="title">{question.title}</h1>
+  <h1 class="title has-text-centered"> {question.title}</h1>
 {:catch error}
-  <h1 class="title has-text-danger">{error.message}</h1>
+  <h1 class="title has-text-danger has-text-centered">{error.message}</h1>
 {/await}

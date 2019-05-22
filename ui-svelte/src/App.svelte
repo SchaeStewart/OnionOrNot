@@ -23,7 +23,7 @@
         throw new Error(data);
       }
     } catch (e) {
-      console.log(error);
+      console.log(e);
     } finally {
       gettingQuestion = false;
     }
@@ -65,32 +65,37 @@
   }
 </script>
 
-<style>
-  h1 {
-    color: purple;
-  }
-</style>
+<div class="section">
+  <div class="columns">
+    <div class="column">
+      <Question {question} />
+    </div>
+  </div>
+</div>
 
 <div class="section">
-  <div class="container">
-    <Question {question} />
-
+  <div class="container has-text-centered">
     <button
-      class="button is-primary"
+      class="button is-primary "
       on:click={() => submitAnswer(true)}
       disabled={answer !== null || gettingQuestion === true}>
       Is r/TheOnion
     </button>
+
     <button
       class="button is-primary"
       on:click={() => submitAnswer(false)}
       disabled={answer !== null || gettingQuestion === true}>
       Is r/NotTheOnion
     </button>
+  </div>
 
-    <Answer {answer} newRoundHandler={getNewRound} />
+  <div class="section">
+    <div class="container has-text-centered">
+      <Answer {answer} newRoundHandler={getNewRound} />
 
-    <!-- Score counter -->
-    <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+      <!-- Score counter -->
+      <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+    </div>
   </div>
 </div>
