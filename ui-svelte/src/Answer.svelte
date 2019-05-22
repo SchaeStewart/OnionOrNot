@@ -10,12 +10,14 @@
 {#if answer !== null}
   <div class="box">
     <p class={titleClass}> {answer.correct ? 'Correct!' : 'Wrong!'} </p>
-    <p>
+    <p class="subtitle">
       <a href={`https://old.reddit.com/${answer.permalink}`}>
         View Reddit Post
       </a>
     </p>
-    <a href={answer.url}>View Article</a>
+    <p class="subtitle">
+      <a href={answer.url}>View Article</a>
+    </p>
     <br />
     <button class="button is-primary" on:click={newRoundHandler}>
       Get a new question

@@ -1,6 +1,8 @@
 <script>
   import Question from "./Question.svelte";
   import Answer from "./Answer.svelte";
+  import AnswerInput from "./AnswerInput.svelte";
+  import ScoreCounter from "./ScoreCounter.svelte";
   import { score } from "./stores.js";
 
   // State
@@ -75,29 +77,16 @@
 
 <div class="section">
   <div class="container has-text-centered">
-    <button
-      class="button is-primary "
-      on:click={() => submitAnswer(true)}
-      disabled={answer !== null || gettingQuestion === true}>
-      Is r/TheOnion
-    </button>
-
-    <button
-      class="button is-primary"
-      on:click={() => submitAnswer(false)}
-      disabled={answer !== null || gettingQuestion === true}>
-      Is r/NotTheOnion
-    </button>
+    <AnswerInput {answer} {submitAnswer} {gettingQuestion} />
   </div>
 
-  <!-- Score counter -->
   <div class="container has-text-centered">
-    <p>You've answered {$score.numCorrect} of {$score.numAsked} correctly</p>
+    <ScoreCounter />
   </div>
+</div>
 
-  <div class="section">
-    <div class="container has-text-centered">
-      <Answer {answer} newRoundHandler={getNewRound} />
-    </div>
+<div class="section">
+  <div class="container has-text-centered">
+    <Answer {answer} newRoundHandler={getNewRound} />
   </div>
 </div>
