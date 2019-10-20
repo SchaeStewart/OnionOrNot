@@ -9,7 +9,7 @@ enum SOURCES {
   reddit = 1,
 };
 
-const pickSub = () => (Math.floor(Math.random() * 10) % 2 === 0 ? 'TheOnion' : 'NotTheOnion');
+const pickSub = (): string => (Math.floor(Math.random() * 10) % 2 === 0 ? 'TheOnion' : 'NotTheOnion');
 async function getRedditPost() {
   const sub = pickSub();
   return axios.get(`https://reddit.com/r/${sub}/random.json`)
