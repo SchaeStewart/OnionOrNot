@@ -9,6 +9,7 @@
   let gettingQuestion = true;
   let question = getQuestion();
   let answer = null;
+  document.title = "Onion or Not"
 
   // Helpers
   async function getQuestion() {
