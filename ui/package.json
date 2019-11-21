@@ -1,31 +1,25 @@
 {
-  "name": "onion-or-not",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "grommet": "^2.0.0-rc",
-    "grommet-icons": "^3.2.0",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.1",
-    "styled-components": "^4.0.3"
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "rollup": "^1.10.1",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^4.0.4",
+    "sirv-cli": "^0.4.0",
+    "svelte": "^3.0.0"
   },
   "scripts": {
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "start:dev": "REACT_APP_STATE=dev react-scripts start",
-    "start:prod": "REACT_APP_STATE=production react-scripts start",
+    "build": "rollup -c",
+    "autobuild": "rollup -c -w",
+    "dev": "run-p start:dev autobuild",
+    "start": "sirv public",
+    "start:dev": "sirv public --dev",
     "predeploy": "npm run build",
-    "deploy": "aws s3 sync build s3://onion-or-not-client --delete",
+    "deploy": "aws s3 sync public s3://onion-or-not-client --delete",
     "postdeploy": "aws cloudfront create-invalidation --distribution-id E1T06J0UWAZLHY --paths '/*' && aws cloudfront create-invalidation --distribution-id E2MBAGNMM38MRJ --paths '/*'"
-  },
-  "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.7.0",
-    "prettier": "^1.14.3"
   }
 }
